@@ -19,8 +19,11 @@ class AppRouter extends React.Component {
       <div id="app">
         <Router>
           <Switch>
-            <Route exact path="/" component={() => <Redirect to={'/rank'} />} />
-            <Route path="/rank" component={CoinHistory} />
+            <Route
+              exact
+              path="/"
+              component={() => <Redirect to={'/rank/1'} />}
+            />
             <Route path="/rank/:page" component={CoinHistory} />
           </Switch>
         </Router>

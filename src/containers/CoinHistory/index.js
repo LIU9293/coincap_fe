@@ -48,12 +48,38 @@ class CoinHistory extends React.PureComponent {
       return {
         title: {
           text: coinData.coinName,
+          textStyle: {
+            color: '#f8f9fa',
+          },
         },
         xAxis: {
           type: 'category',
+          boundaryGap: false,
+          axisTick: {
+            show: false,
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#f8f9fa',
+            },
+          },
         },
         yAxis: {
           type: 'value',
+          axisTick: {
+            show: false,
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#f8f9fa',
+            },
+          },
+          splitLine: {
+            show: false,
+          },
+          axisLabel: {
+            color: '#f8f9fa',
+          },
         },
         series: [],
       };
@@ -62,6 +88,9 @@ class CoinHistory extends React.PureComponent {
     return {
       title: {
         text: coinData.coinName,
+        textStyle: {
+          color: '#f8f9fa',
+        },
       },
       tooltip: {
         trigger: 'axis',
@@ -231,11 +260,11 @@ class CoinHistory extends React.PureComponent {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const page = ownProps.match.params.page || 1;
+  const page = parseInt(ownProps.match.params.page, 10) || 1;
   return {
     page,
     historyList: state.coinHistory.historyList,
-    coinList: state.coinList.list.slice((page - 1) * 9, 9),
+    coinList: state.coinList.list.slice((page - 1) * 9, page * 9),
   };
 };
 

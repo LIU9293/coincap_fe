@@ -20,7 +20,7 @@ export const setCoinPageEpic = (action$, store) =>
     .switchMap(action => {
       const { page } = action;
       const { list } = store.getState().coinList;
-      return Observable.of(...list.slice((page - 1) * 9, 9));
+      return Observable.of(...list.slice((page - 1) * 9, page * 9));
     })
     .mergeMap(coin => {
       return Observable.of(
