@@ -89,6 +89,7 @@ module.exports = {
       containers: path.resolve(paths.appSrc, 'containers'),
       appRedux: path.resolve(paths.appSrc, 'redux'),
       config: path.resolve(paths.appSrc, 'config'),
+      screens: path.resolve(paths.appSrc, 'screens'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

@@ -11,9 +11,9 @@ export const setCoinPageEpic = (action$, store) =>
     .delayWhen(action => {
       const { list } = store.getState().coinList;
       if (list.length > 0) {
-        return Observable.of(true);
+        return Observable.timer(0);
       }
-      return Observable.interval(500).takeUntil(
+      return Observable.timer(10000).takeUntil(
         action$.ofType(CoinListTypes.GET_COIN_LIST_SUCCEED)
       );
     })
@@ -25,17 +25,22 @@ export const setCoinPageEpic = (action$, store) =>
     .mergeMap(coin => {
       return Observable.of(
         CoinHistoryActions.getCoinHistory({
-          coinCode: coin.coinCode,
+          coinName: coin.coinName,
         })
       );
     });
+
+export const setCoinPageEpic2 = (action$, store) =>
+  action$
+    .ofType(CoinHistoryTypes.SET_COIN_PAGE)
+    .map(() => CoinHistoryActions.clearHistoryList());
 
 export const getCoinListEpic = action$ =>
   action$
     .ofType(CoinHistoryTypes.GET_COIN_HISTORY)
     // use concatMap here for make request queue
     .concatMap(action => {
-      let { coinCode, start, end } = action.payload;
+      let { coinName, start, end } = action.payload;
       end = end
         ? moment(end).format('YYYY-MM-DD')
         : moment().format('YYYY-MM-DD');
@@ -45,7 +50,7 @@ export const getCoinListEpic = action$ =>
             .subtract(1, 'months')
             .format('YYYY-MM-DD');
       return ajax({
-        url: `${URL}/coin_history/${coinCode}?start=${start}&end=${end}`,
+        url: `${URL}/coin_history/${coinName}?start=${start}&end=${end}`,
         method: 'GET',
         responseType: 'json',
       })

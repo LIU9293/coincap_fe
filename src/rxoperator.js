@@ -15,5 +15,7 @@ import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/delayWhen';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/interval';
+import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/merge';
+import 'rxjs/add/operator/timeInterval';

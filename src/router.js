@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import { CoinListActions } from 'appRedux/coinList';
 import { connect } from 'react-redux';
-import CoinHistory from 'containers/CoinHistory';
+import CoinRankCompare from 'screens/coinRankCompare';
 
 class AppRouter extends React.Component {
   componentWillMount() {
@@ -24,7 +24,7 @@ class AppRouter extends React.Component {
               path="/"
               component={() => <Redirect to={'/rank/1'} />}
             />
-            <Route path="/rank/:page" component={CoinHistory} />
+            <Route path="/rank/:page" component={CoinRankCompare} />
           </Switch>
         </Router>
       </div>

@@ -41,13 +41,13 @@ class CoinHistory extends React.PureComponent {
   getOption = coinData => {
     const { historyList } = this.props;
     const currentData = historyList.find(
-      item => item[0].coinCode === coinData.coinCode
+      item => item[0].coinName === coinData.coinName
     );
 
     if (!currentData) {
       return {
         title: {
-          text: coinData.coinName,
+          text: `${coinData.coinCode} - ${coinData.coinName}`,
           textStyle: {
             color: '#f8f9fa',
           },
@@ -87,7 +87,7 @@ class CoinHistory extends React.PureComponent {
 
     return {
       title: {
-        text: coinData.coinName,
+        text: `${coinData.coinCode} - ${coinData.coinName}`,
         textStyle: {
           color: '#f8f9fa',
         },
@@ -248,7 +248,7 @@ class CoinHistory extends React.PureComponent {
               key={coinData.coinCode}
             >
               <ReactEcharts
-                style={{ height: '390px', padding: '10px' }}
+                style={{ height: '350px', padding: '10px' }}
                 option={this.getOption(coinData)}
               />
             </ChartBlock>
@@ -260,11 +260,12 @@ class CoinHistory extends React.PureComponent {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const page = parseInt(ownProps.match.params.page, 10) || 1;
   return {
-    page,
     historyList: state.coinHistory.historyList,
-    coinList: state.coinList.list.slice((page - 1) * 9, page * 9),
+    coinList: state.coinList.list.slice(
+      (ownProps.page - 1) * 9,
+      ownProps.page * 9
+    ),
   };
 };
 

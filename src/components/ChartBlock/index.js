@@ -13,7 +13,7 @@ const Tilt = styled.div`
 
 const GalleryItem = styled.div`
   display: flex;
-  height: 390px;
+  height: 350px;
   min-width: 25%;
   flex-direction: column;
   margin: 5px;
