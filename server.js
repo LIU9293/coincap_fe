@@ -1,9 +1,20 @@
-const serve = require('serve');
+const express = require('express');
+const path = require('path');
 const port = process.env.PORT || 8002;
+const app = express();
+const compression = require('compression');
 
-serve('build', {
-  port,
-  ignore: ['node_modules'],
+//gzip
+app.use(compression());
+
+//static
+app.use(express.static(path.resolve(__dirname, 'build')));
+
+//always return index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
-console.log('server started at port : ', port);
+app.listen(port);
+
+console.log('node server started on port ' + port);
