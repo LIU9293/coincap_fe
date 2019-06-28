@@ -3,16 +3,19 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import * as coinListEpics from './coinList/epic';
 import * as coinHistoryEpics from './coinHistory/epic';
+import * as coinDetailEpics from './coinDetail/epic';
 
 export const epics = combineEpics(
   ...Object.values(coinListEpics),
-  ...Object.values(coinHistoryEpics)
+  ...Object.values(coinHistoryEpics),
+  ...Object.values(coinDetailEpics)
 );
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
   coinList: require('./coinList').reducer,
   coinHistory: require('./coinHistory').reducer,
+  coinDetail: require('./coinDetail').reducer,
 });
 
 // creates the store

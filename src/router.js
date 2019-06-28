@@ -8,9 +8,10 @@ import {
 import { CoinListActions } from 'appRedux/coinList';
 import { connect } from 'react-redux';
 import CoinRankCompare from 'screens/coinRankCompare';
+import CoinDetail from 'screens/CoinDetail';
 
 class AppRouter extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.getCoinList();
   }
 
@@ -25,6 +26,7 @@ class AppRouter extends React.Component {
               component={() => <Redirect to={'/rank/1'} />}
             />
             <Route path="/rank/:page" component={CoinRankCompare} />
+            <Route path="/:coin" component={CoinDetail} />
           </Switch>
         </Router>
       </div>

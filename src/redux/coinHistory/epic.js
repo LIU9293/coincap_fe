@@ -39,7 +39,7 @@ export const getCoinListEpic = action$ =>
   action$
     .ofType(CoinHistoryTypes.GET_COIN_HISTORY)
     // use concatMap here for make request queue
-    .concatMap(action => {
+    .mergeMap(action => {
       let { coinName, start, end } = action.payload;
       end = end
         ? moment(end).format('YYYY-MM-DD')
@@ -63,4 +63,4 @@ export const getCoinListEpic = action$ =>
         .catch(error =>
           Observable.of(CoinHistoryActions.getCoinHistoryFail(error))
         );
-    });
+    }, 9);

@@ -96,6 +96,8 @@ module.exports = {
       appRedux: path.resolve(paths.appSrc, 'redux'),
       config: path.resolve(paths.appSrc, 'config'),
       screens: path.resolve(paths.appSrc, 'screens'),
+      utils: path.resolve(paths.appSrc, 'utils'),
+      icons: path.resolve(paths.appSrc, 'icons'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

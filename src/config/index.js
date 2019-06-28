@@ -1,3 +1,3 @@
-const URL = 'http://45.32.43.84:8001/api';
+const URL = 'http://13.115.249.224:8080/api';
 
 export { URL };

@@ -2,9 +2,8 @@ import styled from 'styled-components';
 
 const Pager = styled.div`
   cursor: pointer;
-  height: 50px;
-  width: 120px;
-  border-radius: 8px;
+  height: ${props => (props.small ? '40px' : '50px')};
+  width: ${props => (props.small ? '100px' : '140px')};
   background-color: #dee2e6;
   color: #212529;
   display: flex;

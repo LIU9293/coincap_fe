@@ -6,7 +6,7 @@ const ChartBlockContainer = styled.div`
   flex-wrap: wrap;
   justify-content: space-around;
   overflow-x: hidden;
-  padding: 20px;
+  padding: 15px 8px;
 
   @media (max-width: 700px) {
     padding: 5px;

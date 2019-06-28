@@ -2,25 +2,26 @@ import React from 'react';
 import ChartBlock from 'components/ChartBlock';
 import ChartBlockContainer from 'components/ChartBlockContainer';
 import { connect } from 'react-redux';
-import { CoinHistoryActions } from 'appRedux/coinHistory';
 import ReactEcharts from 'echarts-for-react';
-import { range } from 'ramda';
-import numeral from 'numeral';
-import moment from 'moment';
+import { getOption } from 'utils/chart';
+import { slugToName } from 'utils/name';
+
+import { CoinHistoryActions } from 'appRedux/coinHistory';
+import { CoinDetailActions } from 'appRedux/coinDetail';
 
 const RANDOM_COLORS = [
-  '#ff6b6b',
-  '#f06595',
-  '#cc5de8',
-  '#845ef7',
-  '#5c7cfa',
-  '#339af0',
-  '#22b8cf',
+  '#4c6ef5',
+  '#4c6ef5',
+  '#4c6ef5',
+  '#228be6',
+  '#228be6',
+  '#228be6',
+  '#15aabf',
+  '#15aabf',
+  '#15aabf',
+  '#12b886',
   '#20c997',
-  '#51cf66',
-  '#94d82d',
-  '#fcc419',
-  '#ff922b',
+  '#38d9a9',
 ];
 
 class CoinHistory extends React.PureComponent {
@@ -31,6 +32,9 @@ class CoinHistory extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.page !== this.props.page) {
       this.getCoinHistory(nextProps.page);
+    }
+    if (window) {
+      window.scrollTo(0, 0);
     }
   }
 
@@ -44,197 +48,16 @@ class CoinHistory extends React.PureComponent {
       item => item[0].coinName === coinData.coinName
     );
 
-    if (!currentData) {
-      return {
-        title: {
-          text: `${coinData.coinCode} - ${coinData.coinName}`,
-          textStyle: {
-            color: '#f8f9fa',
-          },
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          axisTick: {
-            show: false,
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#f8f9fa',
-            },
-          },
-        },
-        yAxis: {
-          type: 'value',
-          axisTick: {
-            show: false,
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#f8f9fa',
-            },
-          },
-          splitLine: {
-            show: false,
-          },
-          axisLabel: {
-            color: '#f8f9fa',
-          },
-        },
-        series: [],
-      };
-    }
-
-    return {
-      title: {
-        text: `${coinData.coinCode} - ${coinData.coinName}`,
-        textStyle: {
-          color: '#f8f9fa',
-        },
-      },
-      tooltip: {
-        trigger: 'axis',
-      },
-      grid: {
-        left: '3%',
-        right: '3%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#f8f9fa',
-          },
-        },
-        data: currentData.map(i =>
-          moment(i.recordDate, 'MMM DD, YYYY').format('L')
-        ),
-      },
-      yAxis: [
-        {
-          type: 'value',
-          minInterval: 1,
-          inverse: true,
-          min: this.getRankMin(currentData),
-          max: this.getRankMax(currentData),
-          axisTick: {
-            show: false,
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#f8f9fa',
-            },
-          },
-          splitLine: {
-            show: false,
-          },
-          axisLabel: {
-            color: '#f8f9fa',
-          },
-        },
-        {
-          type: 'value',
-          min: function(value) {
-            return value.min - (value.max - value.min) * 0.1;
-          },
-          max: function(value) {
-            return value.max * 1.8;
-          },
-
-          axisTick: {
-            show: false,
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#f8f9fa',
-            },
-          },
-          axisLabel: {
-            formatter: function(item) {
-              return numeral(item).format('($0a)');
-            },
-            color: '#f8f9fa',
-          },
-          splitLine: {
-            show: false,
-          },
-        },
-      ],
-      series: [
-        {
-          name: 'Rank',
-          type: 'line',
-          step: 'end',
-          yAxisIndex: 0,
-          data: currentData.map(i => i.coinRank),
-          lineStyle: {
-            normal: {
-              color: '#f1f3f5',
-            },
-          },
-        },
-        {
-          name: 'Market Cap',
-          yAxisIndex: 1,
-          type: 'line',
-          smooth: true,
-          areaStyle: {
-            normal: {
-              color: '#f1f3f5',
-            },
-          },
-          data: currentData.map(i => i.marketCap),
-          lineStyle: {
-            normal: {
-              color: '#f1f3f5',
-            },
-          },
-        },
-      ],
-      visualMap: [
-        {
-          show: false,
-          type: 'continuous',
-          seriesIndex: 1,
-          min: 0,
-          max: 400,
-        },
-      ],
-    };
+    return getOption(
+      currentData,
+      coinData.coinCode,
+      slugToName(coinData.coinName)
+    );
   };
 
-  getRankMax = dataList => {
-    const ranks = dataList.map(item => item.coinRank);
-    const realMax = Math.max(...ranks);
-    if (realMax > 10) {
-      return realMax + 5;
-    }
-    return 15;
-  };
-
-  getRankMin = dataList => {
-    const ranks = dataList.map(item => item.coinRank);
-    const realMin = Math.min(...ranks);
-    if (realMin > 10) {
-      return realMin - 5;
-    }
-    return 1;
-  };
-
-  getYAxis = dataList => {
-    const ranks = dataList.map(item => item.coinRank);
-    const realMin = Math.min(...ranks);
-    const realMax = Math.max(...ranks);
-    if (realMax === realMin && realMax === 1) {
-      return [1, 2, 3, 4, 5];
-    }
-    return range(realMin, realMax);
+  onLinkClick = color => {
+    this.props.clearDetail();
+    this.props.setColor(color);
   };
 
   render() {
@@ -242,10 +65,13 @@ class CoinHistory extends React.PureComponent {
     return (
       <ChartBlockContainer>
         {coinList.map((coinData, index) => {
+          const color = RANDOM_COLORS[index];
           return (
             <ChartBlock
-              backgroundColor={RANDOM_COLORS[index]}
+              backgroundColor={color}
               key={coinData.coinCode}
+              link={`/${coinData.coinName}`}
+              onLinkClick={() => this.onLinkClick(color)}
             >
               <ReactEcharts
                 style={{ height: '350px', padding: '10px' }}
@@ -271,6 +97,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   setCoinPage: page => dispatch(CoinHistoryActions.setCoinPage(page)),
+  clearDetail: () => dispatch(CoinDetailActions.clearData()),
+  setColor: color => dispatch(CoinDetailActions.setColor(color)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoinHistory);
